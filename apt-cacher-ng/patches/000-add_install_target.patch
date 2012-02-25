@@ -1,0 +1,14 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -283,3 +283,11 @@
+ else(fuse_FOUND AND HAVE_FUSE_25)
+    message("FUSE not found or incompatible, not building acngfs")
+ endif(fuse_FOUND AND HAVE_FUSE_25)
++
++#########################################
++## Install stuff for OpenWRT packaging ##
++#########################################
++
++INSTALL(TARGETS apt-cacher-ng
++    RUNTIME DESTINATION sbin
++)
