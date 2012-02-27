@@ -37,3 +37,15 @@ stop()
 {
     # STUFF GOES HERE
 }
+
+
+# CREATE LOG DIR
+create_log_dir()
+{
+    local acng_log_dir="/var/log/apt-cacher-ng"
+    if [ ! -d "$acng_log_dir" ]; then
+        mkdir -p "$acng_log_dir"
+        chown apt-cacher-ng:apt-cacher-ng "$acng_log_dir"
+        chmod 2755 "$acng_log_dir"
+    fi
+}

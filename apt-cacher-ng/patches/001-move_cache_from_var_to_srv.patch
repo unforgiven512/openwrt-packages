@@ -1,0 +1,11 @@
+--- a/conf/acng.conf
++++ b/conf/acng.conf
+@@ -2,7 +2,7 @@
+ # Letter case in directive names does not matter. Must be separated with colons.
+ # Valid boolean values are a zero number for false, non-zero numbers for true.
+ 
+-CacheDir: /var/cache/apt-cacher-ng
++CacheDir: /srv/apt-cacher-ng
+ 
+ # set empty to disable logging
+ LogDir: /var/log/apt-cacher-ng
