@@ -113,6 +113,20 @@ define Package/apt-cacher-ng/postinst
     chown apt-cacher-ng:apt-cacher-ng /etc/apt-cacher-ng/security.conf
     chmod 0600 /etc/apt-cacher-ng/security.conf
 
+    # Basic setup information
+    echo -e "\033[1mapt-cacher-ng is now installed.\033[0m"
+    echo -e "Please follow the following instructions to enable it:"
+    echo -e "\t- Create the directory /srv/apt-cacher-ng on external storage"
+    echo -e "\t- If you're using extroot, it's as easy as:"
+    echo -e "\033[1m\t\t# mkdir -p /srv/apt-cacher-ng\033[0m"
+    echo -e "\t- If you're not using extroot, you can do something like this:"
+    echo -e "\033[1m\t\t# mkdir -p /mnt/sda1/srv/apt-cacher-ng\033[0m"
+    echo -e "\033[1m\t\t# mount -o bind /mnt/sda1/srv/apt-cacher-ng /srv/apt-cacher-ng\033[0m\n"
+    echo -e "\t- Once this step is complete, you can enable the \033[1mapt-cacher-ng\033[0m service by doing:"
+    echo -e "\033[1m\t\t# /etc/init.d/apt-cacher-ng enable\033[0m"
+    echo -e "\t- And you can start the service by doing:"
+    echo -e "\033[1m\t\t# /etc/init.d/apt-cacher-ng start \033[0m"
+
 endef
 
 define Package/apt-cacher-ng/postrm
