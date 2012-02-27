@@ -1,51 +1,80 @@
 #!/bin/sh /etc/rc.common
 # Copyright (C) 2012 Gerad Munsch <gmunsch@unforgivendevelopment.com>
 
+# XXX: We may want to convert this init script to handle a UCI-style config in
+#      the future (ie: /etc/config/apt-cacher-ng), and parse the config and
+#      build a configuration file on each startup.
+
 START=95
 STOP=10
 
-# SOURCE /etc/default/apt-cacher-ng for more shit
+NAME="apt-cacher-ng"
+DAEMON="/usr/sbin/apt-cacher-ng"
+CFG_DIR="/etc/apt-cacher-ng"
 
-#DAEMON=/usr/sbin/apt-cacher-ng
-#NAME=apt-cacher-ng
-#DESC=apt-cacher-ng
-#RUNDIR="/var/run/$NAME"
-#PIDFILE="$RUNDIR/pid"
-#SOCKETFILE="$RUNDIR/socket"
-#DAEMON_OPTS="$DAEMON_OPTS pidfile=$PIDFILE SocketPath=$SOCKETFILE foreground=0 $EXTRA_ACNG_OPTS "
-
-# ERROR: error()
 error()
 {
     echo "${initscript}:" "$@" 1>&2
 }
 
-
-# START: start()
 start()
 {
-    # GET PID
-    ## IF PID EXISTS && PIDFILE EXISTS && PIDFILE CONTAINS PID
-    ### return 255
-    rm -rf "$RUNDIR" || return 1
-    #start-stop-daemon --start --chuid $NAME --group $NAME --quiet --pidfile $PIDFILE --exec $DAEMON --$DAEMON_OPTS
+    PIDOF=$(pidof apt-cacher-ng)
+    if [ -n "$PIDOF" ] && [ -e "$PIDFILE" ] && [ "$PIDOF" = "$(cat $PIDFILE)" ] ; then
+        return 255
+    fi
+    rm -rf "/var/run/$NAME" || return 1
+
+    # OpenWRT service wrapper parameters
+    SERVICE_UID="$NAME" # XXX: We may need a numerical UID here.
+    SERVICE_GID="$NAME" # XXX: We may need a numerical GID here.
+    SERVICE_PID_FILE="/var/run/$NAME/pid"
+
+    # Extra 'apt-cacher-ng' parameters
+    SOCKET_FILE="/var/run/$NAME/socket"
+    acng_opts="-c $CFG_DIR pidfile=$SERVICE_PID_FILE SocketPath=$SOCKET_FILE foreground=0"
+
+    create_log_dir
+    chmod_cache_dir
+    service_start $DAEMON $acng_opts
 }
 
-
-# STOP: stop()
 stop()
 {
-    # STUFF GOES HERE
+    # OpenWRT service wrapper parameters
+    SERVICE_PID_FILE="/var/run/$NAME/pid"
+
+    service_stop $DAEMON
+    rm -f $SERVICE_PID_FILE
 }
 
+create_run_dir()
+{
+    local acng_run_dir="/var/run/$NAME"
+    if [ ! -d "$acng_run_dir" ]; then
+        mkdir -p $acng_run_dir
+        chown $NAME:$NAME $acng_run_dir
+        chmod 0755 "$acng_run_dir"
+    fi
+}
 
-# CREATE LOG DIR
 create_log_dir()
 {
-    local acng_log_dir="/var/log/apt-cacher-ng"
+    local acng_log_dir="/var/log/$NAME"
     if [ ! -d "$acng_log_dir" ]; then
         mkdir -p "$acng_log_dir"
-        chown apt-cacher-ng:apt-cacher-ng "$acng_log_dir"
+        chown $NAME:$NAME "$acng_log_dir"
         chmod 2755 "$acng_log_dir"
     fi
+}
+
+chmod_cache_dir()
+{
+    local acng_cache_dir=$(grep -h '^CacheDir:' $CFG_DIR/acng.conf 2>/dev/null | \
+        while read a b ; do
+            echo "$b"
+        done)
+
+    chown $NAME:$NAME "$acng_cache_dir"
+    chmod 2755 "$acng_cache_dir"
 }

@@ -32,14 +32,13 @@ PKG_CAT:=xzcat
 # fuse (kmod-fuse, fuse-utils, libfuse)
 # libwrap
 # liblzma (package not present)
-# adduser ?
 
 define Package/apt-cacher-ng
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
   MDEPENDS:=@USE_UCLIBC
-  DEPENDS:=+bzip2 +zlib
+  DEPENDS:=+bzip2 +zlib +libstdcpp
   TITLE:=A caching proxy for Debian-type packages
   MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
   URL:=http://www.unix-ag.uni-kl.de/~bloch/acng/
@@ -109,29 +108,27 @@ if [ ! -e "/etc/apt-cacher-ng/.configured" ]; then
 	# ADDUSER "apt-cacher-ng" --system --group --no-create-home --home /var/cache/apt-cacher-ng
 	echo -e "\033[1m* Adding 'apt-cacher-ng' user and group...\033[0m"
 
+	source /etc/functions.sh
+
 	# check for a free UID in the system user range (500-1000)
-	for UID in $$(seq 500 1000)
+	for UID in $$(seq 300 1000)
 	do
 		grep -q -e "^[^:]*:[^:]:$$UID:" /etc/passwd || break
 	done
 	[ $$UID -eq 1000 ] && { echo "ERROR: Could not find a suitable UID"; exit 1; }
 
 	# check for a free GID in the system group range (500-1000)
-	for GID in $$(seq 500 1000)
+	for GID in $$(seq 300 1000)
 	do
 		grep -q -e "^[^:]*:[^:]:$$GID:" /etc/group || break
 	done
 	[ $$GID -eq 1000 ] && { echo "ERROR: Could not find a suitable GID"; exit 1; }
 
 	# add new group entry
-	cp /etc/group /etc/group.new
-	echo apt-cacher-ng:x:$$GID: >> /etc/group.new
-	mv /etc/group.new /etc/group
+	group_exists apt-cacher-ng || group_add apt-cacher-ng $$GID
 
 	# add new user entry
-	cp /etc/passwd /etc/passwd.new
-	echo "apt-cacher-ng:!:$$UID:$$GID:apt-cacher-ng:/srv/apt-cacher-ng:/bin/ash" >> /etc/passwd.new
-	mv /etc/passwd.new /etc/passwd
+	user_exists apt-cacher-ng || user_add apt-cacher-ng $$UID $$GID apt-cacher-ng /srv/apt-cacher-ng
 
 	# set file mode on security.conf
 	chown apt-cacher-ng:apt-cacher-ng /etc/apt-cacher-ng/security.conf
