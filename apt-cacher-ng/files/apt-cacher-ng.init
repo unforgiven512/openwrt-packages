@@ -1,0 +1,39 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2012 Gerad Munsch <gmunsch@unforgivendevelopment.com>
+
+START=95
+STOP=10
+
+# SOURCE /etc/default/apt-cacher-ng for more shit
+
+#DAEMON=/usr/sbin/apt-cacher-ng
+#NAME=apt-cacher-ng
+#DESC=apt-cacher-ng
+#RUNDIR="/var/run/$NAME"
+#PIDFILE="$RUNDIR/pid"
+#SOCKETFILE="$RUNDIR/socket"
+#DAEMON_OPTS="$DAEMON_OPTS pidfile=$PIDFILE SocketPath=$SOCKETFILE foreground=0 $EXTRA_ACNG_OPTS "
+
+# ERROR: error()
+error()
+{
+    echo "${initscript}:" "$@" 1>&2
+}
+
+
+# START: start()
+start()
+{
+    # GET PID
+    ## IF PID EXISTS && PIDFILE EXISTS && PIDFILE CONTAINS PID
+    ### return 255
+    rm -rf "$RUNDIR" || return 1
+    #start-stop-daemon --start --chuid $NAME --group $NAME --quiet --pidfile $PIDFILE --exec $DAEMON --$DAEMON_OPTS
+}
+
+
+# STOP: stop()
+stop()
+{
+    # STUFF GOES HERE
+}

@@ -32,6 +32,7 @@ PKG_CAT:=xzcat
 # fuse (kmod-fuse, fuse-utils, libfuse)
 # libwrap
 # liblzma (package not present)
+# adduser ?
 
 define Package/apt-cacher-ng
   SECTION:=net
@@ -88,6 +89,34 @@ endef
 define Package/apt-cacher-ng/conffiles
 /etc/apt-cacher-ng/acng.conf
 /etc/apt-cacher-ng/security.conf
+endef
+
+define Package/apt-cacher-ng/postinst
+#!/bin/sh
+
+    # ADDUSER "apt-cacher-ng" --quiet --system --group --no-create-home --home /var/cache/apt-cacher-ng
+
+    ## This may be moved to the init script, for the fact that /var/ is currently a volatile directory
+    ## Perhaps we can add a way to detect if /var/ is volatile or not?
+    ## Also, $CDIR may need moved to non-volatile storage?
+    # CDIR=/var/cache/apt-cacher-ng
+    # LDIR=/var/log/apt-cacher-ng
+    # for x in $CDIR $LDIR ; do
+    #   if [ ! -d "$x" ]; then
+    #     mkdir -p "$x"
+    #     chown apt-cacher-ng:apt-cacher-ng "$x"
+    #     chmod 2755 "$x"
+    #   fi
+    # done
+
+    # perhaps we should test for ownership and file mode (apt-cacher-ng:apt-cacher-ng; 0600)
+    chown apt-cacher-ng:apt-cacher-ng /etc/apt-cacher-ng/security.conf
+    chmod 0600 /etc/apt-cacher-ng/security.conf
+
+endef
+
+define Package/apt-cacher-ng/postrm
+#!/bin/sh
 endef
 
 $(eval $(call BuildPackage,apt-cacher-ng))
