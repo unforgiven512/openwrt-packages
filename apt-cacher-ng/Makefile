@@ -110,14 +110,14 @@ if [ ! -e "/etc/apt-cacher-ng/.configured" ]; then
 
 	source /etc/functions.sh
 
-	# check for a free UID in the system user range (500-1000)
+	# check for a free UID in the system user range (300-1000)
 	for UID in $$(seq 300 1000)
 	do
 		grep -q -e "^[^:]*:[^:]:$$UID:" /etc/passwd || break
 	done
 	[ $$UID -eq 1000 ] && { echo "ERROR: Could not find a suitable UID"; exit 1; }
 
-	# check for a free GID in the system group range (500-1000)
+	# check for a free GID in the system group range (300-1000)
 	for GID in $$(seq 300 1000)
 	do
 		grep -q -e "^[^:]*:[^:]:$$GID:" /etc/group || break
@@ -161,6 +161,8 @@ endef
 
 define Package/apt-cacher-ng/postrm
 #!/bin/sh
+rm -f /etc/apt-cacher-ng/.configured
+rm -rf /etc/apt-cacher-ng
 endef
 
 $(eval $(call BuildPackage,apt-cacher-ng))
