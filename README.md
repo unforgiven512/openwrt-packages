@@ -103,6 +103,7 @@ Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-n
          ```
          tar -xJf apt-cacher-ng_3.1.orig.tar.xz
          ```
+
     * copy it
          ```
          mv apt-cacher-ng_3.1 a
@@ -114,7 +115,8 @@ Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-n
         ```
         diff -ur a b > /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
 	```
-        build
+
+    * build
         ```
         rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
         make V=s
