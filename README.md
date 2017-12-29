@@ -53,7 +53,7 @@
     scp  bin/packages/arm_cortex-a9_vfpv3/local/apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk root@openwrt:
     ```
 
-1. Install the apt-cacher-ng package [3]*
+1. Install the apt-cacher-ng package [3]
     ```
     ssh root@openwrt
     opkg install apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk
