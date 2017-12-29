@@ -81,44 +81,53 @@ friendly commands
 * make V=s package/feeds/local/apt-cacher-ng/compile
 * make V=s package/feeds/local/apt-cacher-ng/install
 
-[1] Buildroot Makefile problem. Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/Makefile and retry
+### [1] Buildroot Makefile problem.
+Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/Makefile and retry
+
 ```
 ./scripts/feeds uninstall apt-cacher-ng
 rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
 ./scripts/feeds install apt-cacher-ng
 make menuconfig
 ```
-[2] Package CMakeLists.txt problem. Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch and retry:
+
+### [2] Package CMakeLists.txt problem.
+Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch and retry:
 * setup once:
-  * download the apt-cacher-ng source
-```
-wget http://ftp.us.debian.org/debian/pool/main/a/apt-cacher-ng/apt-cacher-ng_3.1.orig.tar.xz
-```
-  * extract it
-```
-tar -xJf apt-cacher-ng_3.1.orig.tar.xz
-```
-  * copy it
-```
-mv apt-cacher-ng_3.1 a
-cp -a a b
-```
+    * download the apt-cacher-ng source
+        ```
+        wget http://ftp.us.debian.org/debian/pool/main/a/apt-cacher-ng/apt-cacher-ng_3.1.orig.tar.xz
+        ```
 
-ssdsdasdadda
+    * extract it
+         ```
+         tar -xJf apt-cacher-ng_3.1.orig.tar.xz
+         ```
+    * copy it
+         ```
+         mv apt-cacher-ng_3.1 a
+         cp -a a b
+         ```
 
+* edit test cycle
+    * modify b - produce patches for CMakeLists.txt and move them over to /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
+        ```
+        diff -ur a b > /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
+	```
+        build
+        ```
+        rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
+        make V=s
+        ```
+
+### [3] Installation problems in postinst.
+Adjust Buildroot makefile
 ```
-	cycle:
-		modify b - produce patches for CMakeLists.txt and move them over to /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
-			diff -ur a b > /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
-		build
-			rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
-			make V=s
+ssh root@openwrt opkg remove apt-cacher-ng
+./scripts/feeds uninstall apt-cacher-ng
+rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
+./scripts/feeds install apt-cacher-ng
+make -j5
+scp  bin/packages/arm_cortex-a9_vfpv3/local/apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk root@openwrt:
+ssh root@openwrt opkg install apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk
 ```
-[3] Installation problems in postinst. Adjust Buildroot makefile
-	ssh root@openwrt opkg remove apt-cacher-ng
-	./scripts/feeds uninstall apt-cacher-ng
-	rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
-	./scripts/feeds install apt-cacher-ng
-	make -j5
-	scp  bin/packages/arm_cortex-a9_vfpv3/local/apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk root@openwrt:
-	ssh root@openwrt opkg install apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk
