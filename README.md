@@ -1,6 +1,9 @@
-*** Build the package from apt-cacher-ng feed ***
+# LEDE (openwrt) apt-cacher-ng feed
+
+## Build the package from apt-cacher-ng feed
 
 1. Download SDK lede-sdk-17.01.2-mvebu_gcc-5.4.0_musl-1.1.16_eabi.Linux-x86_64.tar.xz from https://downloads.lede-project.org/releases/17.01.2/targets/mvebu/generic/
+Note this is only an example. You have to select and download the SDK for your particular board.
 	wget https://downloads.lede-project.org/releases/17.01.2/targets/mvebu/generic/lede-sdk-17.01.2-mvebu_gcc-5.4.0_musl-1.1.16_eabi.Linux-x86_64.tar.xz
 2. Extract SDK
 	 tar -xJf lede-sdk-17.01.2-mvebu_gcc-5.4.0_musl-1.1.16_eabi.Linux-x86_64.tar.xz
@@ -18,18 +21,18 @@
 	./scripts/feeds update -a
 	./scripts/feeds install apt-cacher-ng
 	make menuconfig
-   menuconfig should show apt-cacher-ng under Network/Web Servers/Proxies [1]
+   menuconfig should show apt-cacher-ng under Network/Web Servers/Proxies [1]*
 
 5. Install local signing keys
 	./staging_dir/host/bin/usign -G -s ./key-build -p ./key-build.pub -c "Local build key"
 
-6. Build package [2]
+6. Build package [2]*
 	make -j5
 
 7. Copy ipk file over to openwrt router
 	 scp  bin/packages/arm_cortex-a9_vfpv3/local/apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk root@openwrt:
 
-8. Install the apt-cacher-ng package [3]
+8. Install the apt-cacher-ng package [3]*
 	ssh root@openwrt
 	opkg install apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk
 
@@ -40,12 +43,13 @@
 10. Restart the service
 	/etc/init.d/apt-cacher-ng restart
 
-*** TODO ***
+## TODO
 
+* Adjust pathnames in README.md
 * Use procd
 * Autoconfigure step 9
 
-*** Troubleshooting ****
+## Troubleshooting
 
 This is possible only if you have followed step 3a.
 
