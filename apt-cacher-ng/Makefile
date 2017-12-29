@@ -8,14 +8,25 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apt-cacher-ng
-PKG_VERSION:=0.7.1
+PKG_VERSION:=3.1
 PKG_RELEASE:=1
 
-PKG_SOURCE:=apt-cacher-ng_$(PKG_VERSION).orig.tar.xz
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.xz
 PKG_SOURCE_URL:=http://ftp.us.debian.org/debian/pool/main/a/apt-cacher-ng/
-PKG_MD5SUM:=f7ccdea08ca9773c0d429f97f61cc848
+PKG_MD5SUM:=0da22961f2eb52fbab42b4f8858cea06
+PKG_MAINTAINER:=Vassilis Virvilis <vasvir2@gmail.com>
+#PKG_MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
+PKG_LICENSE:=GPL-3.0
+PKG_LICENSE_FILES:=COPYING
 
 PKG_CAT:=xzcat
+PKG_INSTALL:=1
+PKG_BUILD_PARALLEL:=1
+
+CMAKE_INSTALL:=1
+
+include $(INCLUDE_DIR)/package.mk
+include $(INCLUDE_DIR)/cmake.mk
 
 # Perhaps we should define a minimum-dependency package, as well as a "heavy"
 # package with as many features (read: dependencies) as possible
@@ -23,10 +34,12 @@ PKG_CAT:=xzcat
 # Dependencies for light package:
 # bzip2
 # zlib
+# libopenssl
 #
 # Dependencies for heavy package:
 # bzip2
 # zlib
+# libopenssl
 # xinetd
 # perl (do we need sub-packages??)
 # fuse (kmod-fuse, fuse-utils, libfuse)
@@ -37,21 +50,15 @@ define Package/apt-cacher-ng
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
-  MDEPENDS:=@USE_UCLIBC
-  DEPENDS:=+bzip2 +zlib +libstdcpp
   TITLE:=A caching proxy for Debian-type packages
-  MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
+  DEPENDS:=+bzip2 +zlib +libstdcpp +libopenssl
   URL:=http://www.unix-ag.uni-kl.de/~bloch/acng/
+  MENU:=1
 endef
 
 define Package/apt-cacher-ng/description
 	Apt-Cacher-NG is a caching proxy, specifically designed with Debian-style packages in mind.
 endef
-
-CMAKE_INSTALL:=1
-
-include $(INCLUDE_DIR)/package.mk
-include $(INCLUDE_DIR)/cmake.mk
 
 define Build/Configure
 	rm -f $(PKG_BUILD_DIR)/GNUmakefile
@@ -77,9 +84,9 @@ define Package/apt-cacher-ng/install
 	$(CP) $(PKG_BUILD_DIR)/conf/deb_mirrors.gz $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/debvol_mirrors.gz $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/delconfirm.html $(1)/usr/lib/apt-cacher-ng/
-	$(CP) $(PKG_BUILD_DIR)/distkill.pl $(1)/usr/lib/apt-cacher-ng/
+	$(CP) $(PKG_BUILD_DIR)/scripts/distkill.pl $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/epel_mirrors $(1)/usr/lib/apt-cacher-ng/
-	$(CP) $(PKG_BUILD_DIR)/expire-caller.pl $(1)/usr/lib/apt-cacher-ng/
+	$(CP) $(PKG_BUILD_DIR)/scripts/expire-caller.pl $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/fedora_mirrors $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/maint.html $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/report.html $(1)/usr/lib/apt-cacher-ng/
@@ -87,7 +94,7 @@ define Package/apt-cacher-ng/install
 	$(CP) $(PKG_BUILD_DIR)/conf/sl_mirrors $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/style.css $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/ubuntu_mirrors $(1)/usr/lib/apt-cacher-ng/
-	$(CP) $(PKG_BUILD_DIR)/urlencode-fixer.pl $(1)/usr/lib/apt-cacher-ng/
+	$(CP) $(PKG_BUILD_DIR)/scripts/urlencode-fixer.pl $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/userinfo.html $(1)/usr/lib/apt-cacher-ng/
 endef
 
@@ -108,7 +115,7 @@ if [ ! -e "/etc/apt-cacher-ng/.configured" ]; then
 	# ADDUSER "apt-cacher-ng" --system --group --no-create-home --home /var/cache/apt-cacher-ng
 	echo -e "\033[1m* Adding 'apt-cacher-ng' user and group...\033[0m"
 
-	source /etc/functions.sh
+	source /lib/functions.sh
 
 	# check for a free UID in the system user range (300-1000)
 	for UID in $$(seq 300 1000)
