@@ -114,7 +114,7 @@ Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-n
     * modify b - produce patches for CMakeLists.txt and move them over to /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
         ```
         diff -ur a b > /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
-	```
+        ```
 
     * build
         ```
