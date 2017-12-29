@@ -83,13 +83,12 @@ friendly commands
 
 ### [1] Buildroot Makefile problem.
 Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/Makefile and retry
-
-```
-./scripts/feeds uninstall apt-cacher-ng
-rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
-./scripts/feeds install apt-cacher-ng
-make menuconfig
-```
+    ```
+    ./scripts/feeds uninstall apt-cacher-ng
+    rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
+    ./scripts/feeds install apt-cacher-ng
+    make menuconfig
+    ```
 
 ### [2] Package CMakeLists.txt problem.
 Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch and retry:
@@ -124,12 +123,12 @@ Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-n
 
 ### [3] Installation problems in postinst.
 Adjust Buildroot makefile
-```
-ssh root@openwrt opkg remove apt-cacher-ng
-./scripts/feeds uninstall apt-cacher-ng
-rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
-./scripts/feeds install apt-cacher-ng
-make -j5
-scp  bin/packages/arm_cortex-a9_vfpv3/local/apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk root@openwrt:
-ssh root@openwrt opkg install apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk
-```
+    ```
+    ssh root@openwrt opkg remove apt-cacher-ng
+    ./scripts/feeds uninstall apt-cacher-ng
+    rm -rf build_dir/target-arm_cortex-a9+vfpv3_musl-1.1.16_eabi/apt-cacher-ng-3.1/
+    ./scripts/feeds install apt-cacher-ng
+    make -j5
+    scp  bin/packages/arm_cortex-a9_vfpv3/local/apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk root@openwrt:
+    ssh root@openwrt opkg install apt-cacher-ng_3.1-1_arm_cortex-a9_vfpv3.ipk
+    ```
