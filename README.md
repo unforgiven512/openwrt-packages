@@ -91,7 +91,7 @@ Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-n
     rm -rf build_dir/target-arm_cortex-a9+vfpv3-d16_musl_eabi/apt-cacher-ng-3.5/
     ./scripts/feeds install apt-cacher-ng
     make menuconfig
-```
+    ```
 
 This may help if you need to update dependencies
     ```
