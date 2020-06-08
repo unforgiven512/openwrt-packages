@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2012 Gerad Munsch <gmunsch@unforgivendevelopment.com>
-#
+# Copyright (C) 2012 Gerad Munsch <gmunsch@unforgivendevelopment.com> original author
+# Updates are done by Vassilis Virvilis vasvir2@gmail.com
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apt-cacher-ng
-PKG_VERSION:=3.1
+PKG_VERSION:=3.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.xz
 PKG_SOURCE_URL:=http://ftp.us.debian.org/debian/pool/main/a/apt-cacher-ng/
-PKG_MD5SUM:=0da22961f2eb52fbab42b4f8858cea06
+PKG_MD5SUM:=129dfeb63f14896fcf133d1bb9b8a981
 PKG_MAINTAINER:=Vassilis Virvilis <vasvir2@gmail.com>
 #PKG_MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
 PKG_LICENSE:=GPL-3.0
@@ -28,30 +28,18 @@ CMAKE_INSTALL:=1
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
-# Perhaps we should define a minimum-dependency package, as well as a "heavy"
-# package with as many features (read: dependencies) as possible
-#
-# Dependencies for light package:
-# bzip2
-# zlib
-# libopenssl
-#
-# Dependencies for heavy package:
-# bzip2
-# zlib
-# libopenssl
+# Possible extra dependencies for an even heavier package
 # xinetd
 # perl (do we need sub-packages??)
 # fuse (kmod-fuse, fuse-utils, libfuse)
 # libwrap
-# liblzma (package not present)
 
 define Package/apt-cacher-ng
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=Web Servers/Proxies
   TITLE:=A caching proxy for Debian-type packages
-  DEPENDS:=+bzip2 +zlib +libstdcpp +libopenssl
+  DEPENDS:=+bzip2 +zlib +libstdcpp +libopenssl +liblzma +libevent2 +libevent2-pthreads +libatomic
   URL:=http://www.unix-ag.uni-kl.de/~bloch/acng/
   MENU:=1
 endef
@@ -79,6 +67,7 @@ define Package/apt-cacher-ng/install
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) files/apt-cacher-ng.init $(1)/etc/init.d/apt-cacher-ng
 	$(INSTALL_DIR) $(1)/usr/lib/apt-cacher-ng
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/libsupacng.so $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/conf/archlx_mirrors $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/cygwin_mirrors $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/deb_mirrors.gz $(1)/usr/lib/apt-cacher-ng/
