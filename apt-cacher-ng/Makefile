@@ -48,11 +48,6 @@ define Package/apt-cacher-ng/description
 	Apt-Cacher-NG is a caching proxy, specifically designed with Debian-style packages in mind.
 endef
 
-define Build/Configure
-	rm -f $(PKG_BUILD_DIR)/GNUmakefile
-	$(call Build/Configure/Default)
-endef
-
 define Package/apt-cacher-ng/install
 	$(INSTALL_DIR) $(1)/usr/sbin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/apt-cacher-ng $(1)/usr/sbin/
