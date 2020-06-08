@@ -86,17 +86,17 @@ friendly commands
 
 ### [1] Buildroot Makefile problem.
 Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/Makefile and retry
-    ```
-    ./scripts/feeds uninstall apt-cacher-ng
-    rm -rf build_dir/target-arm_cortex-a9+vfpv3-d16_musl_eabi/apt-cacher-ng-3.5/
-    ./scripts/feeds install apt-cacher-ng
-    make menuconfig
-    ```
+```
+./scripts/feeds uninstall apt-cacher-ng
+rm -rf build_dir/target-arm_cortex-a9+vfpv3-d16_musl_eabi/apt-cacher-ng-3.5/
+./scripts/feeds install apt-cacher-ng
+make menuconfig
+```
 
 This may help if you need to update dependencies
-    ```
-    ./scripts/feeds update -a
-    ```
+```
+./scripts/feeds update -a
+```
 
 ### [2] Package CMakeLists.txt problem.
 Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch and retry:
@@ -120,7 +120,7 @@ Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-n
 * edit test cycle
     * modify b - produce patches for CMakeLists.txt and move them over to /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
         ```
-        diff -ur a b > /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
+       diff -ur a b > /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-ng/patches/000-add_install_target.patch
         ```
 
     * build
@@ -130,13 +130,13 @@ Adjust /home/bill/Downloads/hardware/linksys1200ac/openwrt-packages/apt-cacher-n
         ```
 
 ### [3] Installation problems in postinst.
-Adjust Buildroot Makefile
-    ```
-    ssh root@openwrt opkg remove apt-cacher-ng
-    ./scripts/feeds uninstall apt-cacher-ng
-    rm -rf build_dir/target-arm_cortex-a9+vfpv3-d16_musl_eabi/apt-cacher-ng-3.5/
-    ./scripts/feeds install apt-cacher-ng
-    make -j5
-    scp bin/packages/arm_cortex-a9_vfpv3-d16/local/apt-cacher-ng_3.5-1_arm_cortex-a9_vfpv3-d16.ipk root@openwrt:
-    ssh root@openwrt opkg install apt-cacher-ng_3.5-1_arm_cortex-a9_vfpv3-d16.ipk
-    ```
+Adjust Buildroot Makefile and retry:
+```
+ssh root@openwrt opkg remove apt-cacher-ng
+./scripts/feeds uninstall apt-cacher-ng
+rm -rf build_dir/target-arm_cortex-a9+vfpv3-d16_musl_eabi/apt-cacher-ng-3.5/
+./scripts/feeds install apt-cacher-ng
+make -j5
+scp bin/packages/arm_cortex-a9_vfpv3-d16/local/apt-cacher-ng_3.5-1_arm_cortex-a9_vfpv3-d16.ipk root@openwrt:
+ssh root@openwrt opkg install apt-cacher-ng_3.5-1_arm_cortex-a9_vfpv3-d16.ipk
+```
