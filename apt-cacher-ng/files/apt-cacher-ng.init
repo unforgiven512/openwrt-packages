@@ -34,6 +34,7 @@ start()
     SOCKET_FILE="/var/run/$NAME/socket"
     acng_opts="-c $CFG_DIR pidfile=$SERVICE_PID_FILE SocketPath=$SOCKET_FILE foreground=0"
 
+    create_run_dir
     create_log_dir
     chmod_cache_dir
     service_start $DAEMON $acng_opts
