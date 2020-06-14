@@ -13,7 +13,7 @@ PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.xz
 PKG_SOURCE_URL:=http://ftp.us.debian.org/debian/pool/main/a/apt-cacher-ng/
-PKG_MD5SUM:=129dfeb63f14896fcf133d1bb9b8a981
+PKG_HASH:=82c67c45a84ea7b5cace7f04680512973472d1ea191f22528ee75d6b05b0e640
 PKG_MAINTAINER:=Vassilis Virvilis <vasvir2@gmail.com>
 #PKG_MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
 PKG_LICENSE:=GPL-3.0
