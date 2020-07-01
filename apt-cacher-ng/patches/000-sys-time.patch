@@ -1,0 +1,12 @@
+diff -ur a/include/meta.h b/include/meta.h
+--- a/include/meta.h	2020-04-21 00:34:56.000000000 +0300
++++ b/include/meta.h	2020-06-07 23:56:09.751897590 +0300
+@@ -27,6 +27,7 @@
+ #include <strings.h>
+ #include <cstdlib>
+ #include <errno.h>
++#include <sys/time.h>
+ 
+ #define EXTREME_MEMORY_SAVING false
+ 
+Only in b/include: meta.h~
