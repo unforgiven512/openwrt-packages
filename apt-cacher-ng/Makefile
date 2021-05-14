@@ -42,6 +42,7 @@ define Package/apt-cacher-ng
   TITLE:=A caching proxy for Debian-type packages
   MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
   URL:=http://www.unix-ag.uni-kl.de/~bloch/acng/
+  FILE_MODES:=/etc/apt-cacher-ng/security.conf:apt-cacher-ng:apt-cacher-ng:0600
 endef
 
 define Package/apt-cacher-ng/description
@@ -129,10 +130,6 @@ if [ ! -e "/etc/apt-cacher-ng/.configured" ]; then
 
 	# add new user entry
 	user_exists apt-cacher-ng || user_add apt-cacher-ng $$UID $$GID apt-cacher-ng /srv/apt-cacher-ng
-
-	# set file mode on security.conf
-	chown apt-cacher-ng:apt-cacher-ng /etc/apt-cacher-ng/security.conf
-	chmod 0600 /etc/apt-cacher-ng/security.conf
 
 	# TODO: Perhaps, in the future, we can come up with a better way to pick a Debian/Ubuntu mirror,
 	# perhaps via a lookup on the current IP address to determine country, or something.
