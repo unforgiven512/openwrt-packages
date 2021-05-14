@@ -42,6 +42,7 @@ define Package/apt-cacher-ng
   TITLE:=A caching proxy for Debian-type packages
   MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
   URL:=http://www.unix-ag.uni-kl.de/~bloch/acng/
+  USERID:=apt-cacher-ng:apt-cacher-ng
 endef
 
 define Package/apt-cacher-ng/description
@@ -104,31 +105,6 @@ endef
 define Package/apt-cacher-ng/postinst
 #!/bin/sh
 if [ ! -e "/etc/apt-cacher-ng/.configured" ]; then
-
-	# ADDUSER "apt-cacher-ng" --system --group --no-create-home --home /var/cache/apt-cacher-ng
-	echo -e "\033[1m* Adding 'apt-cacher-ng' user and group...\033[0m"
-
-	source /etc/functions.sh
-
-	# check for a free UID in the system user range (300-1000)
-	for UID in $$(seq 300 1000)
-	do
-		grep -q -e "^[^:]*:[^:]:$$UID:" /etc/passwd || break
-	done
-	[ $$UID -eq 1000 ] && { echo "ERROR: Could not find a suitable UID"; exit 1; }
-
-	# check for a free GID in the system group range (300-1000)
-	for GID in $$(seq 300 1000)
-	do
-		grep -q -e "^[^:]*:[^:]:$$GID:" /etc/group || break
-	done
-	[ $$GID -eq 1000 ] && { echo "ERROR: Could not find a suitable GID"; exit 1; }
-
-	# add new group entry
-	group_exists apt-cacher-ng || group_add apt-cacher-ng $$GID
-
-	# add new user entry
-	user_exists apt-cacher-ng || user_add apt-cacher-ng $$UID $$GID apt-cacher-ng /srv/apt-cacher-ng
 
 	# set file mode on security.conf
 	chown apt-cacher-ng:apt-cacher-ng /etc/apt-cacher-ng/security.conf
