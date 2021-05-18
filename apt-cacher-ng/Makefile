@@ -110,9 +110,4 @@ define Package/apt-cacher-ng/postinst
 	echo -e "\033[1m\t\t- It is recommended to leave /etc/apt-cacher-ng/*.default as-is.\033[0m"
 endef
 
-define Package/apt-cacher-ng/postrm
-#!/bin/sh
-rm -rf /etc/apt-cacher-ng
-endef
-
 $(eval $(call BuildPackage,apt-cacher-ng))
