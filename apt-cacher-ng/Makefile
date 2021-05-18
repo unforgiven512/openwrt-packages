@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apt-cacher-ng
 PKG_VERSION:=3.5
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.xz
 PKG_SOURCE_URL:=http://ftp.us.debian.org/debian/pool/main/a/apt-cacher-ng/
@@ -99,12 +99,7 @@ define Package/apt-cacher-ng/postinst
 	# Basic setup information
 	echo -e "\033[1m* apt-cacher-ng is now installed.\033[0m\n"
 	echo -e "Please follow the following instructions to enable it:"
-	echo -e "\t- Create the directory /srv/apt-cacher-ng on external storage"
-	echo -e "\t- If you are using extroot, it's as easy as:"
-	echo -e "\033[1m\t\t# mkdir -p /srv/apt-cacher-ng\033[0m"
-	echo -e "\t- If you are not using extroot, you can do something like this:"
-	echo -e "\033[1m\t\t# mkdir -p /mnt/sda1/srv/apt-cacher-ng\033[0m"
-	echo -e "\033[1m\t\t# mount -o bind /mnt/sda1/srv/apt-cacher-ng /srv/apt-cacher-ng\033[0m\n"
+	echo -e "\t- Edit the /etc/apt-cacher-ng/acng.conf and assign proper values to \033[1mCacheDir\033[0m and \033[1mLogDir\033[0m on external storage."
 	echo -e "\t- Once this step is complete, you can enable the \033[1mapt-cacher-ng\033[0m service by doing:"
 	echo -e "\033[1m\t\t# /etc/init.d/apt-cacher-ng enable\033[0m"
 	echo -e "\t- And you can start the service by doing:"
