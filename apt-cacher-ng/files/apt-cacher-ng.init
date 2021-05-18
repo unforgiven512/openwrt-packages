@@ -37,6 +37,7 @@ start()
     create_run_dir
     create_log_dir
     chmod_cache_dir
+    chmod_cfg_dir
     service_start $DAEMON $acng_opts
 }
 
@@ -78,4 +79,16 @@ chmod_cache_dir()
 
     chown $NAME:$NAME "$acng_cache_dir"
     chmod 2755 "$acng_cache_dir"
+}
+
+# We can drop this for 21.0.2 where FILE_MODES option is working
+chmod_cfg_dir()
+{
+    for cfg_file in $CFG_DIR/*; do
+       if [ "$cfg_file" = "$CFG_DIR/security.conf" ]; then
+           chown $NAME:$NAME "$cfg_file";
+       else
+           chmod 644 "$cfg_file";
+       fi
+    done
 }
