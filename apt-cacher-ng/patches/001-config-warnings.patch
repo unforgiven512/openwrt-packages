@@ -1,16 +1,7 @@
-diff -ur a/conf/acng.conf.in b/conf/acng.conf.in
---- a/conf/acng.conf.in	2020-04-21 00:34:56.000000000 +0300
-+++ b/conf/acng.conf.in	2021-05-18 21:56:52.065711875 +0300
-@@ -73,7 +73,7 @@
- Remap-fedora: file:fedora_mirrors # Fedora Linux
- Remap-epel:   file:epel_mirrors # Fedora EPEL
- Remap-slrep:  file:sl_mirrors # Scientific Linux
--Remap-gentoo: file:gentoo_mirrors.gz /gentoo ; file:backends_gentoo # Gentoo Archives
-+#Remap-gentoo: file:gentoo_mirrors.gz /gentoo ; file:backends_gentoo # Gentoo Archives
- Remap-secdeb: security.debian.org ; security.debian.org deb.debian.org/debian-security
- 
- # Virtual page accessible in a web browser to see statistics and status
-@@ -388,7 +388,7 @@
+diff -ur a1/conf/acng.conf.in b1/conf/acng.conf.in
+--- a1/conf/acng.conf.in	2021-03-08 23:27:10.000000000 +0200
++++ b1/conf/acng.conf.in	2021-05-18 23:05:45.190944432 +0300
+@@ -391,7 +391,7 @@
  # Default: guessed on startup by looking for explicit mention of apt-cacher-ng
  # in /etc/hosts.allow or /etc/hosts.deny files.
  #

@@ -1,7 +1,7 @@
-diff -ur a/include/meta.h b/include/meta.h
---- a/include/meta.h	2020-04-21 00:34:56.000000000 +0300
-+++ b/include/meta.h	2020-06-07 23:56:09.751897590 +0300
-@@ -27,6 +27,7 @@
+diff -ur a1/include/meta.h b1/include/meta.h
+--- a1/include/meta.h	2021-03-08 23:27:10.000000000 +0200
++++ b1/include/meta.h	2021-05-18 23:04:32.916533117 +0300
+@@ -28,6 +28,7 @@
  #include <strings.h>
  #include <cstdlib>
  #include <errno.h>
@@ -9,4 +9,4 @@ diff -ur a/include/meta.h b/include/meta.h
  
  #define EXTREME_MEMORY_SAVING false
  
-Only in b/include: meta.h~
+Only in b1/include: meta.h~

@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=apt-cacher-ng
-PKG_VERSION:=3.5
-PKG_RELEASE:=3
+PKG_VERSION:=3.6.3
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.xz
 PKG_SOURCE_URL:=http://ftp.us.debian.org/debian/pool/main/a/apt-cacher-ng/
-PKG_HASH:=82c67c45a84ea7b5cace7f04680512973472d1ea191f22528ee75d6b05b0e640
+PKG_HASH:=3f802b5a9c633a3062f44883a7fa2b775ec67d4385c29893286bd212e6658c60
 PKG_MAINTAINER:=Vassilis Virvilis <vasvir2@gmail.com>
 #PKG_MAINTAINER:=Gerad Munsch <gmunsch@unforgivendevelopment.com>
 PKG_LICENSE:=GPL-3.0
@@ -56,11 +56,11 @@ define Package/apt-cacher-ng/install
 	$(INSTALL_DIR) $(1)/etc/apt-cacher-ng
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/acng.conf $(1)/etc/apt-cacher-ng/
 	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/security.conf $(1)/etc/apt-cacher-ng/
-	$(INSTALL_CONF) files/backends_debian $(1)/etc/apt-cacher-ng/
-	$(INSTALL_CONF) files/backends_debian.default $(1)/etc/apt-cacher-ng/
-	$(INSTALL_CONF) files/backends_debvol $(1)/etc/apt-cacher-ng/
-	$(INSTALL_CONF) files/backends_ubuntu $(1)/etc/apt-cacher-ng/
-	$(INSTALL_CONF) files/backends_ubuntu.default $(1)/etc/apt-cacher-ng/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/backends_debian $(1)/etc/apt-cacher-ng/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/backends_debian.default $(1)/etc/apt-cacher-ng/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/backends_ubuntu.default $(1)/etc/apt-cacher-ng/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/backends_kali.default $(1)/etc/apt-cacher-ng/
+	$(INSTALL_CONF) $(PKG_BUILD_DIR)/conf/backends_gentoo.default $(1)/etc/apt-cacher-ng/
 	$(INSTALL_DIR) $(1)/etc/init.d/
 	$(INSTALL_BIN) files/apt-cacher-ng.init $(1)/etc/init.d/apt-cacher-ng
 	$(INSTALL_DIR) $(1)/usr/lib/apt-cacher-ng
@@ -80,6 +80,8 @@ define Package/apt-cacher-ng/install
 	$(CP) $(PKG_BUILD_DIR)/conf/sl_mirrors $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/style.css $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/ubuntu_mirrors $(1)/usr/lib/apt-cacher-ng/
+	$(CP) $(PKG_BUILD_DIR)/conf/kali_mirrors $(1)/usr/lib/apt-cacher-ng/
+	$(CP) $(PKG_BUILD_DIR)/conf/gentoo_mirrors.gz $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/scripts/urlencode-fixer.pl $(1)/usr/lib/apt-cacher-ng/
 	$(CP) $(PKG_BUILD_DIR)/conf/userinfo.html $(1)/usr/lib/apt-cacher-ng/
 endef
@@ -89,9 +91,9 @@ define Package/apt-cacher-ng/conffiles
 /etc/apt-cacher-ng/security.conf
 /etc/apt-cacher-ng/backends_debian
 /etc/apt-cacher-ng/backends_debian.default
-/etc/apt-cacher-ng/backends_debvol
-/etc/apt-cacher-ng/backends_ubuntu
 /etc/apt-cacher-ng/backends_ubuntu.default
+/etc/apt-cacher-ng/backends_kali.default
+/etc/apt-cacher-ng/backends_gentoo.default
 endef
 
 define Package/apt-cacher-ng/postinst
