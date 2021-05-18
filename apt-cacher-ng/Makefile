@@ -42,6 +42,8 @@ define Package/apt-cacher-ng
   DEPENDS:=+bzip2 +zlib +libstdcpp +libopenssl +liblzma +libevent2 +libevent2-pthreads +libatomic
   URL:=http://www.unix-ag.uni-kl.de/~bloch/acng/
   MENU:=1
+  USERID:=apt-cacher-ng:apt-cacher-ng
+  FILE_MODES:=/etc/apt-cacher-ng/security.conf:apt-cacher-ng:apt-cacher-ng:0600
 endef
 
 define Package/apt-cacher-ng/description
@@ -94,44 +96,6 @@ endef
 
 define Package/apt-cacher-ng/postinst
 #!/bin/sh
-if [ ! -e "/etc/apt-cacher-ng/.configured" ]; then
-
-	# ADDUSER "apt-cacher-ng" --system --group --no-create-home --home /var/cache/apt-cacher-ng
-	echo -e "\033[1m* Adding 'apt-cacher-ng' user and group...\033[0m"
-
-	source /lib/functions.sh
-
-	# check for a free UID in the system user range (300-1000)
-	for UID in $$(seq 300 1000)
-	do
-		grep -q -e "^[^:]*:[^:]:$$UID:" /etc/passwd || break
-	done
-	[ $$UID -eq 1000 ] && { echo "ERROR: Could not find a suitable UID"; exit 1; }
-
-	# check for a free GID in the system group range (300-1000)
-	for GID in $$(seq 300 1000)
-	do
-		grep -q -e "^[^:]*:[^:]:$$GID:" /etc/group || break
-	done
-	[ $$GID -eq 1000 ] && { echo "ERROR: Could not find a suitable GID"; exit 1; }
-
-	# add new group entry
-	group_exists apt-cacher-ng || group_add apt-cacher-ng $$GID
-
-	# add new user entry
-	user_exists apt-cacher-ng || user_add apt-cacher-ng $$UID $$GID apt-cacher-ng /srv/apt-cacher-ng
-
-	# set file mode on security.conf
-	chown apt-cacher-ng:apt-cacher-ng /etc/apt-cacher-ng/security.conf
-	chmod 0600 /etc/apt-cacher-ng/security.conf
-
-	# TODO: Perhaps, in the future, we can come up with a better way to pick a Debian/Ubuntu mirror,
-	# perhaps via a lookup on the current IP address to determine country, or something.
-	# For now, we just use the generic mirrors, and they're copied from files/ to /etc/apt-cacher-ng/
-
-	# touch /etc/apt-cacher-ng/.configured to indicate that the package has been configured already
-	touch /etc/apt-cacher-ng/.configured
-
 	# Basic setup information
 	echo -e "\033[1m* apt-cacher-ng is now installed.\033[0m\n"
 	echo -e "Please follow the following instructions to enable it:"
@@ -147,12 +111,10 @@ if [ ! -e "/etc/apt-cacher-ng/.configured" ]; then
 	echo -e "\033[1m\t\t# /etc/init.d/apt-cacher-ng start \033[0m"
 	echo -e "\t- You can set your mirrors of choice in \033[1m/etc/apt-cacher-ng/backends_*\033[0m"
 	echo -e "\033[1m\t\t- It is recommended to leave /etc/apt-cacher-ng/*.default as-is.\033[0m"
-fi
 endef
 
 define Package/apt-cacher-ng/postrm
 #!/bin/sh
-rm -f /etc/apt-cacher-ng/.configured
 rm -rf /etc/apt-cacher-ng
 endef
 
