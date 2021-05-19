@@ -1,7 +1,7 @@
 # OpenWrt apt-cacher-ng feed
 
 ## News
-* 2020-06-08 Update to openwrt 19.07.3 - apt-cacher-ng 3.5
+* 2020-06-08 Update to openwrt 19.07.3 - apt-cacher-ng 3.6.3
 
 ## Build the package from apt-cacher-ng feed
 1. Download SDK for your board. Note this is only an example. You have to select and download the SDK for your particular board.
